@@ -25,7 +25,8 @@ def u_exp(theta,beta):
 	norm = intg.quad(f,0.,2.*np.pi)[0]/(2.*np.pi)
 	return f(theta)/norm
 
-### This computse the transport time correction given a scattering potential 
+### This computes the transport RATE correction given a scattering potential 
+### The transport TIME correction is 1/this 
 def calc_tr(u):
 	f = lambda x : u(x)*np.cos(x)
 	return 1. - intg.quad(f,0.,2.*np.pi)[0]/(2.*np.pi)
@@ -123,7 +124,7 @@ def flux_noise(ws,zs,T,u,nthetas=100,nqs=1000,qmax=10.):
 
 	sigma_integral = np.sum(filterfunction *sigma_grid,axis=(-1)) ### Should have shape of z x w grid 
 
-	alpha = calc_tr(u) ### transport time correction factor 
+	alpha = 1./calc_tr(u) ### transport time correction factor 
 
 	### Now we multiply by FDT factors 
 	return sigma_integral *alpha**2 * w_grid[:,:,0]/np.tanh(0.5*w_grid[:,:,0]/T)
